@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.env
+.streamlit/secrets.toml
+data/macro_history.sqlite
+data/overrides/*.csv
