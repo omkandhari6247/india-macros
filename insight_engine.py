@@ -155,9 +155,9 @@ PHASE_PLAYBOOK = {
         "tilt": "Overweight equities/cyclicals; neutral duration.",
     },
     "Mid Expansion": {
-        "desc": "Solid, broad-based growth near potential; policy drifting to "
-                "neutral; curve flatter; inflation beginning to nudge up. The "
-                "'sweet spot' but with maturing risk.",
+        "desc": "Solid, broad-based growth near potential; policy at/near "
+                "neutral; curve still upward-sloping; inflation beginning to "
+                "nudge up. The 'sweet spot', but with maturing risk.",
         "equities": "Positive but more moderate returns and broader "
                     "participation — quality, tech, leaders. Reduce the most "
                     "aggressive cyclical bets.",

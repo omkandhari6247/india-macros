@@ -132,7 +132,13 @@ def _classify(score: float, momentum: float, curve_shape: str,
     rising = momentum >= 0
     flattening = curve_shape in ("Flattening", "Inverted")
     inverted = curve_shape == "Inverted"
-    overheating = flattening or (infl_rising and infl_high)
+    # CFA: the late-cycle 'overheating' signal is driven by the YIELD CURVE
+    # (flattening/inverting) plus a tightening central bank — NOT by inflation
+    # alone. Rising, above-target inflation with a normal/steepening curve is
+    # treated as a supply-side overlay (e.g. an energy shock), recorded for the
+    # narrative but NOT sufficient to declare late expansion on its own.
+    overheating = flattening
+    infl_overlay = infl_rising and infl_high
     reason = ""
 
     if score < 25:
@@ -155,29 +161,32 @@ def _classify(score: float, momentum: float, curve_shape: str,
             phase = "Early Expansion"
             reason = "Improving activity with a still-upward curve — early expansion."
     elif score < 78:
-        # Strong activity: curve + inflation decide mid vs late.
+        # Strong activity: curve (not inflation) decides mid vs late.
         if overheating and rising:
             phase = "Late Expansion"
-            reason = ("Strong activity AND overheating signature (flattening "
-                      "curve / rising-elevated inflation) — late expansion.")
+            reason = ("Strong activity AND a flattening/inverting curve — the "
+                      "curve-confirmed late-expansion signature.")
         elif not rising or inverted:
             phase = "Slowdown"
             reason = "Strong level but rolling over with a flattening curve."
         else:
             phase = "Mid Expansion"
-            reason = ("Strong activity but curve still upward and inflation "
-                      "contained — mid expansion, not yet late.")
+            reason = ("Strong activity with a normal/steepening curve and a "
+                      "central bank not actively tightening — mid expansion." +
+                      (" Above-target, rising inflation is treated as a "
+                       "supply-side overlay, not a curve-confirmed late-cycle "
+                       "signal." if infl_overlay else ""))
     else:  # very strong activity
         if not rising or inverted:
             phase = "Peak"
             reason = "Activity at cyclical highs and rolling over — peak."
         elif overheating:
             phase = "Late Expansion"
-            reason = "Above-trend activity with overheating signs — late expansion."
+            reason = "Above-trend activity with a flattening curve — late expansion."
         else:
             phase = "Mid Expansion"
-            reason = ("Above-trend activity but no overheating signature yet — "
-                      "still mid expansion.")
+            reason = ("Above-trend activity but the curve is still normal/"
+                      "steepening — mid expansion, not yet curve-confirmed late.")
 
     boundaries = [25, 40, 60, 78]
     dist = min(abs(score - b) for b in boundaries)
